@@ -12,6 +12,7 @@ dependencies = [
     "langgraph-checkpoint-sqlite>=2.0.1",
     "aiosqlite>=0.20.0",
     "chainlit>=2.0.0",
+    "python-telegram-bot>=21.10",
 ]
 
 [build-system]

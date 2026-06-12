@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     # ===== LLM Provider =====
     GROQ_API_KEY: str
 
+    # ==== TELEGRAM ==========
+    TELEGRAM_BOT_TOKEN: str
+
     # ===== Model Names =====
     TEXT_MODEL_NAME: str = "llama-3.3-70b-versatile"
     SMALL_TEXT_MODEL_NAME: str = "llama-3.1-8b-instant"

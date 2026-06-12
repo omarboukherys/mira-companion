@@ -33,5 +33,10 @@ class Settings(BaseSettings):
     # ===== Memory (short-term, SQLite) =====
     SHORT_TERM_MEMORY_DB_PATH: str = str(PROJECT_ROOT / "data" / "memory.db")
 
+    # ===== Memory (long-term, Qdrant) =====
+    QDRANT_HOST: str = "localhost"
+    QDRANT_PORT: int = 6333
+    QDRANT_COLLECTION_NAME: str = "long_term_memory"
+    EMBEDDING_MODEL_NAME: str = "BAAI/bge-small-en-v1.5"
 
 settings = Settings()

@@ -9,7 +9,8 @@ from mira.graph.nodes import (
     audio_node,
     conversation_node,
     image_node,
-    router_node
+    router_node,
+    memory_extraction_node
 )
 
 from mira.graph.state import MiraState
@@ -29,8 +30,10 @@ def build_graph():
     builder.add_node("conversation_node", conversation_node)
     builder.add_node("image_node", image_node)
     builder.add_node("audio_node", audio_node)
+    builder.add_node("memory_extraction_node", memory_extraction_node)
 
-    builder.add_edge(START, "router_node")
+    builder.add_edge(START, "memory_extraction_node")
+    builder.add_edge("memory_extraction_node", "router_node")
     builder.add_conditional_edges(
         "router_node",
         select_workflow,

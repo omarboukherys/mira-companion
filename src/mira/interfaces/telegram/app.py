@@ -43,7 +43,9 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
     async with get_compiled_graph() as graph:
         result = await graph.ainvoke(
-            {"messages": [HumanMessage(content=user_text)]},
+            {"messages": [HumanMessage(content=user_text)],
+             "user_id":str(chat_id)
+             },
             config={"configurable": {"thread_id": str(chat_id)}},
         )
 

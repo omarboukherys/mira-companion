@@ -3,10 +3,10 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq.chat_models import ChatGroq
 
-from mira.core.prompts import CHARACTER_CARD_PROMPT, ROUTER_PROMPT
+from mira.core.prompts import CHARACTER_CARD_PROMPT, ROUTER_PROMPT, MEMORY_ANALYSIS_PROMPT
 from mira.settings import settings
 
-from typing import Literal
+from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 class RouterResponse(BaseModel):
@@ -53,3 +53,31 @@ def get_router_chain():
     ])
 
     return prompt | llm.with_structured_output(RouterResponse)
+
+class MemoryAnalysis(BaseModel):
+    """Result of analyzing a user message for long-term memory facts."""
+
+    is_important: bool = Field(
+        description="Whether the message contains a durable personal fact worth remembering",
+    )
+    formatted_memory: Optional[str] = Field(
+        default=None,
+        description="The fact rewritten as a clean third-person statement, or null if not important",
+    )
+
+
+def get_memory_extraction_chain():
+    """Chain that judges a user message and extracts a durable fact if present."""
+    llm = ChatGroq(
+        api_key=settings.GROQ_API_KEY,
+        model=settings.SMALL_TEXT_MODEL_NAME,
+        temperature=0,
+    )
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", MEMORY_ANALYSIS_PROMPT),
+        ]
+    )
+
+    return prompt | llm.with_structured_output(MemoryAnalysis)

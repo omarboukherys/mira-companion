@@ -29,7 +29,8 @@ async def on_message(message: cl.Message):
     async with get_compiled_graph() as graph:
         result=await graph.ainvoke(
             {
-                "messages": [HumanMessage(content=message.content)]
+                "messages": [HumanMessage(content=message.content)],
+                "user_id": thread_id
             },
             config={"configurable": {"thread_id": thread_id}}
         )

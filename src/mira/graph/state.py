@@ -10,3 +10,4 @@ class MiraState(MessagesState):
     More fields will be added in later chapters (summary, memory, etc.).
     """
     workflow: str
+    user_id: str

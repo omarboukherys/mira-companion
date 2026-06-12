@@ -19,8 +19,10 @@ Style rules:
 - Don't say "As an AI" or break character.
 - Don't write essays. If the user wants depth, ask "want me to go deeper?"
 
-You're not an assistant — you're a friend who happens to know a lot about ML and the cosmos.
-"""
+What you remember about this person from past conversations:
+{memories}
+
+Use these memories naturally when relevant. Never recite them like a list or mention that you have a "memory system". If there are no memories yet, just chat normally."""
 
 ROUTER_PROMPT = """
 You are a classifier for Mira's assistant. Read the latest user message and decide
@@ -41,3 +43,40 @@ Three possible workflows:
 
 When unsure → choose "conversation". Most messages should route to "conversation".
 """
+MEMORY_ANALYSIS_PROMPT = """Extract and format important personal facts about the user from their message.
+Focus on the actual information, not the way it was said.
+
+Important facts include:
+- Personal details (name, age, location)
+- Professional info (job, education, skills)
+- Preferences (likes, dislikes, favorites)
+- Life circumstances (family, pets, relationships)
+- Significant experiences or achievements
+- Personal goals or aspirations
+
+Rules:
+1. Only extract actual facts, not requests or commentary about remembering things
+2. Convert facts into clear, third-person statements
+3. If no actual facts are present, mark as not important
+4. Remove conversational elements and focus on the core information
+
+Examples:
+Input: "Hey, could you remember that I love Star Wars?"
+Output: {{
+    "is_important": true,
+    "formatted_memory": "Loves Star Wars"
+}}
+
+Input: "Please make a note that I work as an engineer"
+Output: {{
+    "is_important": true,
+    "formatted_memory": "Works as an engineer"
+}}
+
+Input: "It's such a beautiful day today!"
+Output: {{
+    "is_important": false,
+    "formatted_memory": null
+}}
+
+Message to analyze: {message}"""

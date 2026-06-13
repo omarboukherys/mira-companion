@@ -12,6 +12,7 @@ from langchain_core.messages import AIMessage
 from mira.graph.utils.chains import get_memory_extraction_chain
 from mira.graph.utils.memory import memory_manager
 from mira.graph.utils.image import image_generator
+from mira.graph.utils.audio import audio_generator
 
 def conversation_node(state: MiraState):
     """Generate Mira's in-character reply, enriched with long-term memories."""
@@ -32,7 +33,7 @@ def conversation_node(state: MiraState):
         }
     )
 
-    return {"messages": [response], "image_data": None}
+    return {"messages": [response], "image_data": None, "audio_data": None}
 
 def memory_extraction_node(state: MiraState):
     """Analyze the latest user message and store any durable fact in Qdrant."""
@@ -67,12 +68,20 @@ def image_node(state: MiraState):
     return {
         "messages": [response],
         "image_data": image_bytes,
+        "audio_data": None
     }
 
-def audio_node(state: MiraState) -> dict:
-    """Stub: pretends to generate an audio."""
-    placeholder= AIMessage(
-        content="Audio generation is not wired up yet."
-    )
+def audio_node(state: MiraState):
+    """Generate a spoken audio reply from Mira."""
+    last_message = state["messages"][-1]
 
-    return {"messages": [placeholder]}
+    chain = get_character_response_chain()
+    text_response = chain.invoke({"messages": state["messages"], "memories": "Nothing yet."})
+
+    audio_bytes = audio_generator.generate(text_response.content)
+
+    return {
+        "messages": [text_response],
+        "audio_data": audio_bytes,
+        "image_data": None
+    }

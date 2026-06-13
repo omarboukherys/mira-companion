@@ -51,9 +51,12 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
     reply_text = result["messages"][-1].content
     image_data = result.get("image_data")
+    audio_data = result.get("audio_data")
 
     if image_data:
         await update.message.reply_photo(photo=image_data, caption=reply_text)
+    elif audio_data:
+        await update.message.reply_voice(voice=audio_data, caption=reply_text)
     else:
         await update.message.reply_text(reply_text)
 

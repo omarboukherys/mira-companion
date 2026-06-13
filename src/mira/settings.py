@@ -43,4 +43,8 @@ class Settings(BaseSettings):
     TOGETHER_API_KEY: str
     IMAGE_MODEL_NAME: str="black-forest-labs/FLUX.1-schnell"
 
+    # ===== Audio (Text-to-speech) ====
+    TTS_MODEL_NAME: str = "canopylabs/orpheus-v1-english"
+    TTS_VOICE: str = "hannah"
+
 settings = Settings()

@@ -12,3 +12,4 @@ class MiraState(MessagesState):
     workflow: str
     user_id: str
     image_data: bytes
+    audio_data: bytes

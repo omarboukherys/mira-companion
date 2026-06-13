@@ -39,4 +39,8 @@ class Settings(BaseSettings):
     QDRANT_COLLECTION_NAME: str = "long_term_memory"
     EMBEDDING_MODEL_NAME: str = "BAAI/bge-small-en-v1.5"
 
+    # ===== Image Generation =====
+    TOGETHER_API_KEY: str
+    IMAGE_MODEL_NAME: str="black-forest-labs/FLUX.1-schnell"
+
 settings = Settings()

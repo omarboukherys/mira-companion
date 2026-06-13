@@ -11,6 +11,7 @@ from mira.graph.utils.chains import get_character_response_chain, get_router_cha
 from langchain_core.messages import AIMessage
 from mira.graph.utils.chains import get_memory_extraction_chain
 from mira.graph.utils.memory import memory_manager
+from mira.graph.utils.image import image_generator
 
 def conversation_node(state: MiraState):
     """Generate Mira's in-character reply, enriched with long-term memories."""
@@ -31,7 +32,7 @@ def conversation_node(state: MiraState):
         }
     )
 
-    return {"messages": [response]}
+    return {"messages": [response], "image_data": None}
 
 def memory_extraction_node(state: MiraState):
     """Analyze the latest user message and store any durable fact in Qdrant."""
@@ -55,12 +56,18 @@ def router_node(state: MiraState) -> dict:
 
     return {"workflow": result.response_type}
 
-def image_node(state: MiraState) -> dict:
-    """Stub: pretends to generate an image. Returns a placeholder text reply."""
-    placeholder=AIMessage(
-        content="Image generation is not wired up yet"
-    )
-    return {"messages": [placeholder]}
+def image_node(state: MiraState):
+    """Generate an image from the user's request."""
+    last_message = state["messages"][-1]
+
+    image_bytes = image_generator.generate(last_message.content)
+
+    response = AIMessage(content="Here's what I imagined for you! 🎨")
+
+    return {
+        "messages": [response],
+        "image_data": image_bytes,
+    }
 
 def audio_node(state: MiraState) -> dict:
     """Stub: pretends to generate an audio."""

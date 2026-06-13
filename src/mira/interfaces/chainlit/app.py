@@ -35,9 +35,11 @@ async def on_message(message: cl.Message):
             config={"configurable": {"thread_id": thread_id}}
         )
     
-    reply_text=result['messages'][-1].content
+    reply_text = result["messages"][-1].content
+    image_data = result.get("image_data")
 
-    await cl.Message(
-        content=reply_text,
-        author="Mira"
-    ).send()
+    if image_data:
+        image_element = cl.Image(content=image_data, name="mira_image", display="inline")
+        await cl.Message(content=reply_text, author="Mira", elements=[image_element]).send()
+    else:
+        await cl.Message(content=reply_text, author="Mira").send()

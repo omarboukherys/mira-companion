@@ -25,3 +25,7 @@ data/
 
 # ===== Jupyter =====
 .ipynb_checkpoints/
+
+# ===== tests =======
+test_*.wav
+test_*.png
